@@ -1,0 +1,13 @@
+C:\Users\ac1dl\source\repos\LyricsAPI\LyricsAPI.Core\bin\Debug\net8.0\LyricsAPI.Core.deps.json
+C:\Users\ac1dl\source\repos\LyricsAPI\LyricsAPI.Core\bin\Debug\net8.0\LyricsAPI.Core.dll
+C:\Users\ac1dl\source\repos\LyricsAPI\LyricsAPI.Core\bin\Debug\net8.0\LyricsAPI.Core.pdb
+C:\Users\ac1dl\source\repos\LyricsAPI\LyricsAPI.Core\obj\Debug\net8.0\LyricsAPI.Core.csproj.AssemblyReference.cache
+C:\Users\ac1dl\source\repos\LyricsAPI\LyricsAPI.Core\obj\Debug\net8.0\LyricsAPI.Core.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\ac1dl\source\repos\LyricsAPI\LyricsAPI.Core\obj\Debug\net8.0\LyricsAPI.Core.AssemblyInfoInputs.cache
+C:\Users\ac1dl\source\repos\LyricsAPI\LyricsAPI.Core\obj\Debug\net8.0\LyricsAPI.Core.AssemblyInfo.cs
+C:\Users\ac1dl\source\repos\LyricsAPI\LyricsAPI.Core\obj\Debug\net8.0\LyricsAPI.Core.csproj.CoreCompileInputs.cache
+C:\Users\ac1dl\source\repos\LyricsAPI\LyricsAPI.Core\obj\Debug\net8.0\LyricsAPI.Core.sourcelink.json
+C:\Users\ac1dl\source\repos\LyricsAPI\LyricsAPI.Core\obj\Debug\net8.0\LyricsAPI.Core.dll
+C:\Users\ac1dl\source\repos\LyricsAPI\LyricsAPI.Core\obj\Debug\net8.0\refint\LyricsAPI.Core.dll
+C:\Users\ac1dl\source\repos\LyricsAPI\LyricsAPI.Core\obj\Debug\net8.0\LyricsAPI.Core.pdb
+C:\Users\ac1dl\source\repos\LyricsAPI\LyricsAPI.Core\obj\Debug\net8.0\ref\LyricsAPI.Core.dll

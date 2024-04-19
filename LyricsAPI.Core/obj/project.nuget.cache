@@ -1,8 +1,13 @@
 {
   "version": 2,
-  "dgSpecHash": "AIrQ/IoPbbS7v6AOI3R4FL+1oS9lWyQmYb6ytyKO7WCee//bsk5DfwbC11AVjzoLO3B3mj9b200IfWmRMAZ3jQ==",
+  "dgSpecHash": "/lPYAfVsVxRPWzejz/89mIddo458mbWvkDY/wHrEE7KH8AvR6gWTaTkqrD9+hSFxr67Xg9m+hoR1IgtGBmxlvA==",
   "success": true,
   "projectFilePath": "C:\\Users\\ac1dl\\source\\repos\\LyricsAPI\\LyricsAPI.Core\\LyricsAPI.Core.csproj",
-  "expectedPackageFiles": [],
+  "expectedPackageFiles": [
+    "C:\\Users\\ac1dl\\.nuget\\packages\\fluentvalidation\\11.5.1\\fluentvalidation.11.5.1.nupkg.sha512",
+    "C:\\Users\\ac1dl\\.nuget\\packages\\fluentvalidation.aspnetcore\\11.3.0\\fluentvalidation.aspnetcore.11.3.0.nupkg.sha512",
+    "C:\\Users\\ac1dl\\.nuget\\packages\\fluentvalidation.dependencyinjectionextensions\\11.5.1\\fluentvalidation.dependencyinjectionextensions.11.5.1.nupkg.sha512",
+    "C:\\Users\\ac1dl\\.nuget\\packages\\microsoft.extensions.dependencyinjection.abstractions\\2.1.0\\microsoft.extensions.dependencyinjection.abstractions.2.1.0.nupkg.sha512"
+  ],
   "logs": []
 }

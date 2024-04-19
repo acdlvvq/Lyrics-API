@@ -5,6 +5,14 @@ VisualStudioVersion = 17.9.34728.123
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LyricsAPI.Presentation", "LyricsAPI.Presentation\LyricsAPI.Presentation.csproj", "{60AED445-0D2D-4317-8D59-3B674423F272}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LyricsAPI.Core", "LyricsAPI.Core\LyricsAPI.Core.csproj", "{FDB49EBD-0329-4193-A00B-F558DBA950F1}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LyricsAPI.Persistence", "LyricsAPI.Persistence\LyricsAPI.Persistence.csproj", "{153394B4-1B20-4B27-B328-B7067568391E}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LyricsAPI.Application", "LyricsAPI.Application\LyricsAPI.Application.csproj", "{D5748356-1589-449C-A784-428ECF9C314B}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LyricsAPI.Infrastructure", "LyricsAPI.Infrastructure\LyricsAPI.Infrastructure.csproj", "{E9DF043D-2583-423B-9037-BDA6BC76FAE0}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -15,6 +23,22 @@ Global
 		{60AED445-0D2D-4317-8D59-3B674423F272}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{60AED445-0D2D-4317-8D59-3B674423F272}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{60AED445-0D2D-4317-8D59-3B674423F272}.Release|Any CPU.Build.0 = Release|Any CPU
+		{FDB49EBD-0329-4193-A00B-F558DBA950F1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FDB49EBD-0329-4193-A00B-F558DBA950F1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FDB49EBD-0329-4193-A00B-F558DBA950F1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FDB49EBD-0329-4193-A00B-F558DBA950F1}.Release|Any CPU.Build.0 = Release|Any CPU
+		{153394B4-1B20-4B27-B328-B7067568391E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{153394B4-1B20-4B27-B328-B7067568391E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{153394B4-1B20-4B27-B328-B7067568391E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{153394B4-1B20-4B27-B328-B7067568391E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D5748356-1589-449C-A784-428ECF9C314B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D5748356-1589-449C-A784-428ECF9C314B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D5748356-1589-449C-A784-428ECF9C314B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D5748356-1589-449C-A784-428ECF9C314B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E9DF043D-2583-423B-9037-BDA6BC76FAE0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E9DF043D-2583-423B-9037-BDA6BC76FAE0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E9DF043D-2583-423B-9037-BDA6BC76FAE0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E9DF043D-2583-423B-9037-BDA6BC76FAE0}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

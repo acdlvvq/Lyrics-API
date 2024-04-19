@@ -1,3 +1,11 @@
+using FluentValidation;
+using LyricsAPI.Core.Abstractions;
+using LyricsAPI.Core.Models;
+using LyricsAPI.Core.Validators;
+using LyricsAPI.Persistence;
+using LyricsAPI.Persistence.Repositories;
+using Microsoft.EntityFrameworkCore;
+
 namespace LyricsAPI.Presentation
 {
     public class Program
@@ -8,10 +16,18 @@ namespace LyricsAPI.Presentation
 
             // Add services to the container.
 
+            builder.Services.AddDbContext<SongLyricsDbContext>(
+                options => options.UseNpgsql(
+                    builder.Configuration.GetConnectionString(nameof(SongLyricsDbContext))));
+
             builder.Services.AddControllers();
+
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();
+
+            builder.Services.AddScoped<IValidator<SongLyrics>, SongLyricsValidator>();
+            builder.Services.AddScoped<ISongLyricsRepository, SongLyricsRepository>();
 
             var app = builder.Build();
 
@@ -25,7 +41,6 @@ namespace LyricsAPI.Presentation
             app.UseHttpsRedirection();
 
             app.UseAuthorization();
-
 
             app.MapControllers();
 
