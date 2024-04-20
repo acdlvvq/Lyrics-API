@@ -7,6 +7,10 @@ namespace LyricsAPI.Core.Validators
     {
         public SongLyricsValidator()
         {
+            RuleFor(ls => ls.Id)
+                .NotEmpty()
+                .Length(64);
+
             RuleFor(ls => ls.Artist)
                 .NotEmpty()
                 .Length(2, 30);

@@ -47,7 +47,7 @@ namespace LyricsAPI.Persistence.Repositories
             var songs = await _context.SongLyrics
                 .AsNoTracking()
                 .Select(ls => new SongLyrics(
-                    ls.Artist, ls.TrackName, ls.RawLyrics, ls.ArtistVerses))
+                    ls.Id, ls.Artist, ls.TrackName, ls.RawLyrics, ls.ArtistVerses))
                 .ToListAsync();
 
             return songs;
@@ -57,11 +57,12 @@ namespace LyricsAPI.Persistence.Repositories
         {
             var songs = await _context.SongLyrics
                 .AsNoTracking()
-                .Where(ls => ls.Artist.Contains(artist) || artist.Contains(ls.Artist))
+                .Where(ls => ls.Artist.ToLower().Contains(artist.ToLower()) ||
+                             artist.ToLower().Contains(ls.Artist.ToLower()))
                 .Select(ls => new SongLyrics(
-                    ls.Artist, ls.TrackName, ls.RawLyrics, ls.ArtistVerses))
+                    ls.Id, ls.Artist, ls.TrackName, ls.RawLyrics, ls.ArtistVerses))
                 .ToListAsync();
-
+            
             return songs ?? [];
         }
 
@@ -71,22 +72,10 @@ namespace LyricsAPI.Persistence.Repositories
                 .AsNoTracking()
                 .Where(ls => ls.Id == id)
                 .Select(ls => new SongLyrics(
-                    ls.Artist, ls.TrackName, ls.RawLyrics, ls.ArtistVerses))
+                    ls.Id, ls.Artist, ls.TrackName, ls.RawLyrics, ls.ArtistVerses))
                 .FirstOrDefaultAsync();
 
             return song;
-        }
-
-        public async Task<IList<SongLyrics>> GetByTitleAsync(string title)
-        {
-            var songs = await _context.SongLyrics
-                .AsNoTracking()
-                .Where(ls => ls.TrackName.Contains(title) || title.Contains(ls.TrackName))
-                .Select(ls => new SongLyrics(
-                    ls.Artist, ls.TrackName, ls.RawLyrics, ls.ArtistVerses))
-                .ToListAsync();
-
-            return songs ?? [];
         }
 
         public async Task SaveChangesAsync()
