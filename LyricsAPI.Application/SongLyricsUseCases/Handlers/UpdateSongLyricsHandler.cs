@@ -20,6 +20,11 @@ namespace LyricsAPI.Application.SongLyricsUseCases.Handlers
             var updated = await _repository
                 .UpdateAsync(request.Id, request.RawLyrics, request.ArtistVerses);
 
+            if (updated)
+            {
+                await _repository.SaveChangesAsync();
+            }
+
             return updated;
         }
     }
