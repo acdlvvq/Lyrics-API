@@ -41,19 +41,20 @@ namespace LyricsAPI.Presentation.Controllers
 
         [HttpPost]
         public async Task<ActionResult> AddSongLyricsAsync(
-            string? artist, string? title, string? rawLyrics, string? artistVerses)
+            AddSongLyricsRequest request)
         {
-            if (string.IsNullOrWhiteSpace(artist) ||
-                string.IsNullOrWhiteSpace(title) ||
-                string.IsNullOrWhiteSpace(rawLyrics) ||
-                string.IsNullOrWhiteSpace(artistVerses))
+            if (string.IsNullOrWhiteSpace(request.Artist) ||
+                string.IsNullOrWhiteSpace(request.Title) ||
+                string.IsNullOrWhiteSpace(request.RawLyrics) ||
+                string.IsNullOrWhiteSpace(request.ArtistVerses))
             {
                 return BadRequest(ResponseWrapper.Wrap(
                     "Error", "Parameters Must Not Be Null"));
             }
 
             var addedSong = await _mediator.Send(
-                new AddSongLyricsRequest(artist, title, rawLyrics, artistVerses));
+                new AddSongLyricsRequest(
+                    request.Artist, request.Title, request.RawLyrics, request.ArtistVerses));
 
             if (addedSong is null) 
             {
@@ -81,17 +82,17 @@ namespace LyricsAPI.Presentation.Controllers
 
         [HttpPut("{id}")]
         public async Task<ActionResult> UpdateSongLyricsAsync(
-            string id, string? rawLyrics, string? artistVerses)
+            string id, UpdateSongLyricsRequest request)
         {
-            if (string.IsNullOrWhiteSpace(rawLyrics) ||
-                string.IsNullOrWhiteSpace(artistVerses))
+            if (string.IsNullOrWhiteSpace(request.RawLyrics) ||
+                string.IsNullOrWhiteSpace(request.ArtistVerses))
             {
                 return BadRequest(ResponseWrapper.Wrap(
                     "Error", "Parameters Must Not Be Null"));
             }
 
             var result = await _mediator.Send(
-                new UpdateSongLyricsRequest(id, rawLyrics, artistVerses));
+                new UpdateSongLyricsRequest(id, request.RawLyrics, request.ArtistVerses));
 
             return result ? NoContent() : BadRequest(ResponseWrapper.Wrap("Error", "Song Is Not Found"));    
         }
