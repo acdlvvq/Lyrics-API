@@ -5,6 +5,7 @@ using LyricsAPI.Core.Validators;
 using LyricsAPI.Persistence;
 using LyricsAPI.Persistence.Repositories;
 using Microsoft.EntityFrameworkCore;
+using LyricsAPI.Application;
 
 namespace LyricsAPI.Presentation
 {
@@ -13,8 +14,6 @@ namespace LyricsAPI.Presentation
         public static void Main(string[] args)
         {
             var builder = WebApplication.CreateBuilder(args);
-
-            // Add services to the container.
 
             builder.Services.AddDbContext<SongLyricsDbContext>(
                 options => options.UseNpgsql(
@@ -28,6 +27,8 @@ namespace LyricsAPI.Presentation
 
             builder.Services.AddScoped<IValidator<SongLyrics>, SongLyricsValidator>();
             builder.Services.AddScoped<ISongLyricsRepository, SongLyricsRepository>();
+
+            builder.Services.AddApplication();
 
             var app = builder.Build();
 
@@ -43,7 +44,6 @@ namespace LyricsAPI.Presentation
             app.UseAuthorization();
 
             app.MapControllers();
-
             app.Run();
         }
     }

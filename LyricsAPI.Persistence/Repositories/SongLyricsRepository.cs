@@ -89,9 +89,20 @@ namespace LyricsAPI.Persistence.Repositories
             return songs ?? [];
         }
 
-        public Task<bool> UpdateAsync(string id, SongLyrics songLyrics)
+        public async Task SaveChangesAsync()
         {
-            throw new NotImplementedException();
+            await _context.SaveChangesAsync();
+        }
+
+        public async Task<bool> UpdateAsync(string id, string rawLyrics, string artistVerses)
+        {
+            var updated = await _context.SongLyrics
+                .Where(ls => ls.Id == id)
+                .ExecuteUpdateAsync(setters => setters
+                    .SetProperty(ls => ls.RawLyrics, rawLyrics)
+                    .SetProperty(ls => ls.ArtistVerses, artistVerses));
+
+            return updated != 0;
         }
     }
 }

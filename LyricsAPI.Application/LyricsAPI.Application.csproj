@@ -6,4 +6,15 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
 
+  <ItemGroup>
+    <PackageReference Include="CsvHelper" Version="31.0.4" />
+    <PackageReference Include="MediatR" Version="12.2.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\LyricsAPI.Core\LyricsAPI.Core.csproj" />
+    <ProjectReference Include="..\LyricsAPI.Infrastructure\LyricsAPI.Infrastructure.csproj" />
+    <ProjectReference Include="..\LyricsAPI.Persistence\LyricsAPI.Persistence.csproj" />
+  </ItemGroup>
+
 </Project>

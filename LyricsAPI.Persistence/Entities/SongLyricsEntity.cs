@@ -24,7 +24,7 @@ namespace LyricsAPI.Persistence.Entities
                 Artist = songLyrics.Artist,
                 RawLyrics = songLyrics.RawLyrics,
                 ArtistVerses = songLyrics.ArtistVerses,
-                Id = BitConverter.ToString(SHA256.HashData(Encoding.UTF8.GetBytes(fullName)))
+                Id = BitConverter.ToString(SHA256.HashData(Encoding.UTF8.GetBytes(fullName))).Replace("-", "")
             };
         }
     }
