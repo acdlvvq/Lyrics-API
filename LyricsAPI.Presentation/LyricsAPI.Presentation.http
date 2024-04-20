@@ -1,4 +1,6 @@
 @LyricsAPI.Presentation_HostAddress = http://localhost:5153
 
+GET {{LyricsAPI.Presentation_HostAddress}}/lyrics
+Accept: application/json
 
 ###

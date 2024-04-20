@@ -5,6 +5,8 @@ namespace LyricsAPI.Core.Models
 {
     public class SongLyrics
     {
+        public static int IdLength { get; } = 64;
+
         public SongLyrics(string artist, string title, string rawLyrics, string artistVerses)
         {
             var fullName = new StringBuilder()

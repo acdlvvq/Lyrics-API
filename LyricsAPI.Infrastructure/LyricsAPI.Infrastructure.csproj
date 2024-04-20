@@ -6,4 +6,8 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\LyricsAPI.Core\LyricsAPI.Core.csproj" />
+  </ItemGroup>
+
 </Project>

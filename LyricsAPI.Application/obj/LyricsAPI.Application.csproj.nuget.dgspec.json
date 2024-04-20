@@ -188,7 +188,11 @@
         "frameworks": {
           "net8.0": {
             "targetAlias": "net8.0",
-            "projectReferences": {}
+            "projectReferences": {
+              "C:\\Users\\ac1dl\\source\\repos\\LyricsAPI\\LyricsAPI.Core\\LyricsAPI.Core.csproj": {
+                "projectPath": "C:\\Users\\ac1dl\\source\\repos\\LyricsAPI\\LyricsAPI.Core\\LyricsAPI.Core.csproj"
+              }
+            }
           }
         },
         "warningProperties": {

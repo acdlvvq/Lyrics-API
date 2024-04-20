@@ -191,6 +191,9 @@
         }
       },
       "LyricsAPI.Infrastructure/1.0.0": {
+        "dependencies": {
+          "LyricsAPI.Core": "1.0.0"
+        },
         "runtime": {
           "LyricsAPI.Infrastructure.dll": {}
         }
