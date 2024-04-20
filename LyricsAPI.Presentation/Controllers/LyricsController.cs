@@ -1,0 +1,100 @@
+﻿using LyricsAPI.Application.SongLyricsUseCases.Queries;
+using LyricsAPI.Core.Models;
+using LyricsAPI.Infrastructure;
+using MediatR;
+using Microsoft.AspNetCore.Mvc;
+using System.Security.Cryptography;
+using System.Text;
+
+namespace LyricsAPI.Presentation.Controllers
+{
+    [ApiController]
+    [Route("[controller]")]
+    public class LyricsController : ControllerBase
+    {
+        private readonly IMediator _mediator;
+
+        public LyricsController(
+            IMediator mediator)
+        {
+            _mediator = mediator;
+        }
+
+        [HttpGet("{id}")]
+        public async Task<ActionResult<SongLyrics>> GetSongLyricsByIdAsync(string id)
+        {
+            if (id.Length != SongLyrics.IdLength)
+            {
+                return BadRequest(ResponseWrapper.Wrap(
+                    "Error", $"Id Must Be { SongLyrics.IdLength } Characters Length"));
+            }
+
+            var song = await _mediator.Send(new GetSongLyricsByIdRequest(id));
+
+            if (song is null) 
+            {
+                return NotFound(ResponseWrapper.Wrap(
+                    "Error", "Song Is Not Found"));
+            }
+
+            return Ok(ResponseWrapper.Wrap("Song Lyrics", song));
+        }
+
+        [HttpPost]
+        public async Task<ActionResult<SongLyrics>> AddSongLyricsAsync(
+            string? artist, string? title, string? rawLyrics, string? artistVerses)
+        {
+            if (string.IsNullOrWhiteSpace(artist) ||
+                string.IsNullOrWhiteSpace(title) ||
+                string.IsNullOrWhiteSpace(rawLyrics) ||
+                string.IsNullOrWhiteSpace(artistVerses))
+            {
+                return BadRequest(ResponseWrapper.Wrap(
+                    "Error", "Parameters Must Not Be Null"));
+            }
+
+            var addedSong = await _mediator.Send(
+                new AddSongLyricsRequest(artist, title, rawLyrics, artistVerses));
+
+            if (addedSong is null) 
+            {
+                return BadRequest(ResponseWrapper.Wrap(
+                    "Error", "Parameters Are Not Valid"));
+            }
+
+            var uri = new StringBuilder()
+                .Append(Request.Host.Value)
+                .Append('/')
+                .Append("Lyrics")
+                .Append('/')
+                .Append(addedSong.Id)
+                .ToString();
+            return Created(uri, ResponseWrapper.Wrap("Added Song", addedSong));
+        }
+
+        [HttpDelete("{id}")]
+        public async Task<ActionResult> DeleteSongLyricsAsync(string id)
+        {
+            var result = await _mediator.Send(new DeleteSongLyricsRequest(id));
+
+            return result ? NoContent() : BadRequest(ResponseWrapper.Wrap("Error", "Song Is Not Found"));
+        }
+
+        [HttpPut("{id}")]
+        public async Task<ActionResult> UpdateSongLyricsAsync(
+            string id, string? rawLyrics, string? artistVerses)
+        {
+            if (string.IsNullOrWhiteSpace(rawLyrics) ||
+                string.IsNullOrWhiteSpace(artistVerses))
+            {
+                return BadRequest(ResponseWrapper.Wrap(
+                    "Error", "Parameters Must Not Be Null"));
+            }
+
+            var result = await _mediator.Send(
+                new UpdateSongLyricsRequest(id, rawLyrics, artistVerses));
+
+            return result ? NoContent() : BadRequest(ResponseWrapper.Wrap("Error", "Song Is Not Found"));    
+        }
+    }
+}
