@@ -3,7 +3,6 @@ using LyricsAPI.Core.Models;
 using LyricsAPI.Infrastructure;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
-using System.Security.Cryptography;
 using System.Text;
 
 namespace LyricsAPI.Presentation.Controllers
@@ -21,7 +20,7 @@ namespace LyricsAPI.Presentation.Controllers
         }
 
         [HttpGet("{id}")]
-        public async Task<ActionResult<SongLyrics>> GetSongLyricsByIdAsync(string id)
+        public async Task<ActionResult> GetSongLyricsByIdAsync(string id)
         {
             if (id.Length != SongLyrics.IdLength)
             {
@@ -41,7 +40,7 @@ namespace LyricsAPI.Presentation.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult<SongLyrics>> AddSongLyricsAsync(
+        public async Task<ActionResult> AddSongLyricsAsync(
             string? artist, string? title, string? rawLyrics, string? artistVerses)
         {
             if (string.IsNullOrWhiteSpace(artist) ||
@@ -95,6 +94,28 @@ namespace LyricsAPI.Presentation.Controllers
                 new UpdateSongLyricsRequest(id, rawLyrics, artistVerses));
 
             return result ? NoContent() : BadRequest(ResponseWrapper.Wrap("Error", "Song Is Not Found"));    
+        }
+
+        [HttpGet("{id}/{other}")]
+        public async Task<ActionResult> GetSongMathcesAsync(
+            string id, string other)
+        {
+            var song = await _mediator.Send(new GetSongLyricsByIdRequest(id));
+
+            if (song is null)
+            {
+                return BadRequest(ResponseWrapper.Wrap("Error", "Wrong Song Id"));
+            }
+
+            var otherSong = await _mediator.Send(new GetSongLyricsByIdRequest(other));
+
+            if (otherSong is null) 
+            {
+                return BadRequest(ResponseWrapper.Wrap("Error", "Wrong Second Song Id"));
+            }
+
+            return Ok(ResponseWrapper.Wrap(
+                "Song Word Matches List", StatisticsProvider.GetSongMatches(song, otherSong)));
         }
     }
 }

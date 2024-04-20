@@ -31,7 +31,7 @@ namespace LyricsAPI.Presentation.Controllers
         }
 
         [HttpGet("{artist}")]
-        public async Task<ActionResult<IList<SongLyrics>>> GetSongLyricsByArtistAsync(string artist)
+        public async Task<ActionResult> GetSongLyricsByArtistAsync(string artist)
         {
             var songs = await _mediator.Send(new GetSongLyricsByArtistRequest(artist));
 
