@@ -1,5 +1,6 @@
 ﻿using FluentValidation;
 using LyricsAPI.Core.Abstractions;
+using LyricsAPI.Core.DTO;
 using LyricsAPI.Core.Models;
 using LyricsAPI.Persistence.Entities;
 using Microsoft.EntityFrameworkCore;
@@ -42,12 +43,12 @@ namespace LyricsAPI.Persistence.Repositories
             return deleted != 0;
         }
 
-        public async Task<IList<SongLyrics>> GetAsync()
+        public async Task<IList<SongDTO>> GetAsync()
         {
             var songs = await _context.SongLyrics
                 .AsNoTracking()
-                .Select(ls => new SongLyrics(
-                    ls.Id, ls.Artist, ls.TrackName, ls.RawLyrics, ls.ArtistVerses))
+                .Select(ls => new SongDTO(
+                    ls.Id, ls.Artist, ls.TrackName))
                 .ToListAsync();
 
             return songs;
@@ -75,6 +76,18 @@ namespace LyricsAPI.Persistence.Repositories
                 .FirstOrDefaultAsync();
 
             return song;
+        }
+
+        public async Task<IList<SongDTO>> GetDTOByArtistAsync(string artist)
+        {
+            var songs = await _context.SongLyrics
+                .AsNoTracking()
+                .Where(ls => ls.Artist.ToLower() == artist.ToLower())
+                .Select(ls => new SongDTO(
+                    ls.Id, ls.Artist, ls.TrackName))
+                .ToListAsync();
+
+            return songs ?? [];
         }
 
         public async Task SaveChangesAsync()

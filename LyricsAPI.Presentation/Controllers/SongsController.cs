@@ -1,6 +1,5 @@
 ﻿using LyricsAPI.Application.SongLyricsUseCases.Queries;
 using LyricsAPI.Core.DTO;
-using LyricsAPI.Core.Models;
 using LyricsAPI.Infrastructure;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
@@ -33,11 +32,10 @@ namespace LyricsAPI.Presentation.Controllers
         [HttpGet("{artist}")]
         public async Task<ActionResult> GetSongLyricsByArtistAsync(string artist)
         {
-            var songs = await _mediator.Send(new GetSongLyricsByArtistRequest(artist));
+            var songs = await _mediator.Send(new GetSongDTOByArtistRequest(artist));
 
             return Ok(ResponseWrapper.Wrap(
-                $"'{ artist }' Search Results", songs
-                    .Select(ls => new SongDTO(ls.Id, ls.Artist, ls.Title))));
+                $"'{ artist }' Search Results", songs));
         }
     }
 }

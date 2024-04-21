@@ -3,5 +3,6 @@ using MediatR;
 
 namespace LyricsAPI.Application.SongLyricsUseCases.Queries
 {
-    public record GetAllSongLyricsRequest() : IRequest<IList<SongDTO>>;
+    public record GetSongDTOByArtistRequest(
+        string Artist) : IRequest<IList<SongDTO>>;
 }

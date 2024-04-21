@@ -5,20 +5,21 @@ using MediatR;
 
 namespace LyricsAPI.Application.SongLyricsUseCases.Handlers
 {
-    public class GetAllSongLyricsHandler 
-        : IRequestHandler<GetAllSongLyricsRequest, IList<SongDTO>>
+    public class GetSongDTOByArtistHandler
+        : IRequestHandler<GetSongDTOByArtistRequest, IList<SongDTO>>
     {
         private readonly ISongLyricsRepository _repository;
 
-        public GetAllSongLyricsHandler(ISongLyricsRepository repository)
+        public GetSongDTOByArtistHandler(
+            ISongLyricsRepository repository)
         {
             _repository = repository;
         }
 
         public async Task<IList<SongDTO>> Handle(
-            GetAllSongLyricsRequest request, CancellationToken cancellationToken)
+            GetSongDTOByArtistRequest request, CancellationToken cancellationToken)
         {
-            var songs = await _repository.GetAsync();
+            var songs = await _repository.GetDTOByArtistAsync(request.Artist);
 
             return songs;
         }
