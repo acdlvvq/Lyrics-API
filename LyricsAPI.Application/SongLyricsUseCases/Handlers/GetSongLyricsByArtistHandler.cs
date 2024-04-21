@@ -19,10 +19,9 @@ namespace LyricsAPI.Application.SongLyricsUseCases.Handlers
         public async Task<IList<SongLyrics>> Handle(
             GetSongLyricsByArtistRequest request, CancellationToken cancellationToken)
         {
-           var songs = await _repository.GetByArtistAsync(request.Artist);
+            var songs = await _repository.GetByArtistAsync(request.Artist);
 
             return songs;
-                
         }
     }
 }

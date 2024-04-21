@@ -29,6 +29,7 @@ namespace LyricsAPI.Presentation
             builder.Services.AddScoped<ISongLyricsRepository, SongLyricsRepository>();
 
             builder.Services.AddApplication();
+            builder.Services.AddMemoryCache();
 
             var app = builder.Build();
 

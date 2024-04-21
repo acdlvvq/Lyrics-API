@@ -1,31 +1,46 @@
 ﻿using LyricsAPI.Application.SongLyricsUseCases.Queries;
+using LyricsAPI.Core.Models;
 using LyricsAPI.Infrastructure;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Caching.Memory;
 
 namespace LyricsAPI.Presentation.Controllers
 {
     [ApiController]
-    [Route("[controller]")]
+    [Route("api/[controller]")]
     public class StatisticsController : ControllerBase
     {
         private readonly IMediator _mediator;
+        private readonly IMemoryCache _cache;
 
         public StatisticsController(
-            IMediator mediator)
+            IMediator mediator, IMemoryCache cache)
         {
             _mediator = mediator;
+            _cache = cache;
         }
 
         [HttpGet("{artist}")]
         public async Task<ActionResult> GetArtistStatisticsAsync(
             string artist)
         {
-            var songs = await _mediator.Send(new GetSongLyricsByArtistRequest(artist));
-
-            if (songs is null)
+            if (!_cache.TryGetValue(artist, out var _songs))
             {
-                return NotFound(ResponseWrapper.Wrap("Error", "Song Is Not Found"));
+                _songs = await _mediator.Send(new GetSongLyricsByArtistRequest(artist));
+                _cache.Set(artist, _songs);
+            }
+
+            if (_songs is null)
+            {
+                return NotFound(ResponseWrapper.Wrap("Error", "Artist Is Not Found"));
+            }
+
+            var songs = (List<SongLyrics>) _songs;
+
+            if (songs.Count == 0)
+            {
+                return NotFound(ResponseWrapper.Wrap("Error", "Artist Is Not Found"));
             }
 
             return Ok(ResponseWrapper.Wrap(
@@ -36,11 +51,22 @@ namespace LyricsAPI.Presentation.Controllers
         public async Task<ActionResult> GetWordAmountAsync(
             string artist, string word)
         {
-            var songs = await _mediator.Send(new GetSongLyricsByArtistRequest(artist));
-
-            if (songs is null)
+            if (!_cache.TryGetValue(artist, out var _songs))
             {
-                return NotFound(ResponseWrapper.Wrap("Error", "Song Is Not Found"));
+                _songs = await _mediator.Send(new GetSongLyricsByArtistRequest(artist));
+                _cache.Set(artist, _songs);
+            }
+
+            if (_songs is null)
+            {
+                return NotFound(ResponseWrapper.Wrap("Error", "Artist Is Not Found"));
+            }
+
+            var songs = (List<SongLyrics>)_songs;
+
+            if (songs.Count == 0)
+            {
+                return NotFound(ResponseWrapper.Wrap("Error", "Artist Is Not Found"));
             }
 
             return Ok(ResponseWrapper.Wrap(

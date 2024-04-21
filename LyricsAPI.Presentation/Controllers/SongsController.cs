@@ -8,7 +8,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace LyricsAPI.Presentation.Controllers
 {
     [ApiController]
-    [Route("[controller]")]
+    [Route("api/[controller]")]
     public class SongsController : ControllerBase
     {
         private readonly IMediator _mediator;

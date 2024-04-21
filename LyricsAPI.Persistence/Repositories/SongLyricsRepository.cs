@@ -57,8 +57,7 @@ namespace LyricsAPI.Persistence.Repositories
         {
             var songs = await _context.SongLyrics
                 .AsNoTracking()
-                .Where(ls => ls.Artist.ToLower().Contains(artist.ToLower()) ||
-                             artist.ToLower().Contains(ls.Artist.ToLower()))
+                .Where(ls => ls.Artist.ToLower() == artist.ToLower())
                 .Select(ls => new SongLyrics(
                     ls.Id, ls.Artist, ls.TrackName, ls.RawLyrics, ls.ArtistVerses))
                 .ToListAsync();

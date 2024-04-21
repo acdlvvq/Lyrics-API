@@ -3,20 +3,23 @@ using LyricsAPI.Core.Models;
 using LyricsAPI.Infrastructure;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Caching.Memory;
 using System.Text;
 
 namespace LyricsAPI.Presentation.Controllers
 {
     [ApiController]
-    [Route("[controller]")]
+    [Route("api/[controller]")]
     public class LyricsController : ControllerBase
     {
         private readonly IMediator _mediator;
+        private readonly IMemoryCache _cache;
 
         public LyricsController(
-            IMediator mediator)
+            IMediator mediator, IMemoryCache cache)
         {
             _mediator = mediator;
+            _cache = cache;
         }
 
         [HttpGet("{id}")]
@@ -28,7 +31,12 @@ namespace LyricsAPI.Presentation.Controllers
                     "Error", $"Id Must Be { SongLyrics.IdLength } Characters Length"));
             }
 
-            var song = await _mediator.Send(new GetSongLyricsByIdRequest(id));
+            if (!_cache.TryGetValue(id, out var song))
+            {
+                song = await _mediator.Send(new GetSongLyricsByIdRequest(id));
+                _cache.Set(
+                    id, song, new MemoryCacheEntryOptions().SetAbsoluteExpiration(TimeSpan.FromMinutes(30)));
+            }
 
             if (song is null) 
             {
@@ -36,7 +44,7 @@ namespace LyricsAPI.Presentation.Controllers
                     "Error", "Song Is Not Found"));
             }
 
-            return Ok(ResponseWrapper.Wrap("Song Lyrics", song));
+            return Ok(ResponseWrapper.Wrap("Song Lyrics", (SongLyrics)song));
         }
 
         [HttpPost]
@@ -77,6 +85,11 @@ namespace LyricsAPI.Presentation.Controllers
         {
             var result = await _mediator.Send(new DeleteSongLyricsRequest(id));
 
+            if (result && _cache.TryGetValue(id, out var _))
+            {
+                _cache.Remove(id);
+            }
+
             return result ? NoContent() : BadRequest(ResponseWrapper.Wrap("Error", "Song Is Not Found"));
         }
 
@@ -94,6 +107,11 @@ namespace LyricsAPI.Presentation.Controllers
             var result = await _mediator.Send(
                 new UpdateSongLyricsRequest(id, request.RawLyrics, request.ArtistVerses));
 
+            if (result && _cache.TryGetValue(id, out var _))
+            {
+                _cache.Remove(id);
+            }
+
             return result ? NoContent() : BadRequest(ResponseWrapper.Wrap("Error", "Song Is Not Found"));    
         }
 
@@ -101,14 +119,24 @@ namespace LyricsAPI.Presentation.Controllers
         public async Task<ActionResult> GetSongMathcesAsync(
             string id, string other)
         {
-            var song = await _mediator.Send(new GetSongLyricsByIdRequest(id));
+            if (!_cache.TryGetValue(id, out var song))
+            {
+                song = await _mediator.Send(new GetSongLyricsByIdRequest(id));
+                _cache.Set(
+                    id, song, new MemoryCacheEntryOptions().SetAbsoluteExpiration(TimeSpan.FromMinutes(30)));
+            }
 
             if (song is null)
             {
                 return BadRequest(ResponseWrapper.Wrap("Error", "Wrong Song Id"));
             }
 
-            var otherSong = await _mediator.Send(new GetSongLyricsByIdRequest(other));
+            if (!_cache.TryGetValue(other, out var otherSong))
+            {
+                otherSong = await _mediator.Send(new GetSongLyricsByIdRequest(other));
+                _cache.Set(
+                    other, otherSong, new MemoryCacheEntryOptions().SetAbsoluteExpiration(TimeSpan.FromMinutes(30)));
+            }
 
             if (otherSong is null) 
             {
@@ -116,7 +144,7 @@ namespace LyricsAPI.Presentation.Controllers
             }
 
             return Ok(ResponseWrapper.Wrap(
-                "Song Word Matches List", StatisticsProvider.GetSongMatches(song, otherSong)));
+                "Song Word Matches List", StatisticsProvider.GetSongMatches((SongLyrics)song, (SongLyrics)otherSong)));
         }
     }
 }
