@@ -1,6 +1,6 @@
 ﻿using LyricsAPI.Application.SongLyricsUseCases.Queries;
+using LyricsAPI.Core.Abstractions;
 using LyricsAPI.Core.DTO;
-using LyricsAPI.Infrastructure;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 
@@ -11,11 +11,13 @@ namespace LyricsAPI.Presentation.Controllers
     public class SongsController : ControllerBase
     {
         private readonly IMediator _mediator;
+        private readonly IResponseWrapper _wrapper;
 
         public SongsController(
-            IMediator mediator)
+            IMediator mediator, IResponseWrapper wrapper)
         {
             _mediator = mediator;
+            _wrapper = wrapper;
         }
 
         [HttpGet]
@@ -24,7 +26,7 @@ namespace LyricsAPI.Presentation.Controllers
             var songs = await _mediator.Send(new GetAllSongLyricsRequest());
 
             return Ok(
-                ResponseWrapper.Wrap(
+                _wrapper.Wrap(
                     "All Songs", songs
                         .Select(ls => new SongDTO(ls.Id, ls.Artist, ls.Title))));
         }
@@ -34,7 +36,7 @@ namespace LyricsAPI.Presentation.Controllers
         {
             var songs = await _mediator.Send(new GetSongDTOByArtistRequest(artist));
 
-            return Ok(ResponseWrapper.Wrap(
+            return Ok(_wrapper.Wrap(
                 $"'{ artist }' Search Results", songs));
         }
     }

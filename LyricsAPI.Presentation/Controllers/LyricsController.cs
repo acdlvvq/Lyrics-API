@@ -1,6 +1,6 @@
 ﻿using LyricsAPI.Application.SongLyricsUseCases.Queries;
+using LyricsAPI.Core.Abstractions;
 using LyricsAPI.Core.Models;
-using LyricsAPI.Infrastructure;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Caching.Memory;
@@ -14,12 +14,17 @@ namespace LyricsAPI.Presentation.Controllers
     {
         private readonly IMediator _mediator;
         private readonly IMemoryCache _cache;
+        private readonly IResponseWrapper _wrapper;
+        private readonly IStatisticsProvider _statisticsProvider;
 
         public LyricsController(
-            IMediator mediator, IMemoryCache cache)
+            IMediator mediator, IMemoryCache cache, 
+            IResponseWrapper wrapper, IStatisticsProvider statisticsProvider)
         {
             _mediator = mediator;
             _cache = cache;
+            _wrapper = wrapper;
+            _statisticsProvider = statisticsProvider;
         }
 
         [HttpGet("{id}")]
@@ -27,7 +32,7 @@ namespace LyricsAPI.Presentation.Controllers
         {
             if (id.Length != SongLyrics.IdLength)
             {
-                return BadRequest(ResponseWrapper.Wrap(
+                return BadRequest(_wrapper.Wrap(
                     "Error", $"Id Must Be { SongLyrics.IdLength } Characters Length"));
             }
 
@@ -40,11 +45,11 @@ namespace LyricsAPI.Presentation.Controllers
 
             if (song is null) 
             {
-                return NotFound(ResponseWrapper.Wrap(
+                return NotFound(_wrapper.Wrap(
                     "Error", "Song Is Not Found"));
             }
 
-            return Ok(ResponseWrapper.Wrap("Song Lyrics", (SongLyrics)song));
+            return Ok(_wrapper.Wrap("Song Lyrics", (SongLyrics)song));
         }
 
         [HttpPost]
@@ -56,7 +61,7 @@ namespace LyricsAPI.Presentation.Controllers
                 string.IsNullOrWhiteSpace(request.RawLyrics) ||
                 string.IsNullOrWhiteSpace(request.ArtistVerses))
             {
-                return BadRequest(ResponseWrapper.Wrap(
+                return BadRequest(_wrapper.Wrap(
                     "Error", "Parameters Must Not Be Null"));
             }
 
@@ -66,7 +71,7 @@ namespace LyricsAPI.Presentation.Controllers
 
             if (addedSong is null) 
             {
-                return BadRequest(ResponseWrapper.Wrap(
+                return BadRequest(_wrapper.Wrap(
                     "Error", "Parameters Are Not Valid"));
             }
 
@@ -77,7 +82,7 @@ namespace LyricsAPI.Presentation.Controllers
                 .Append('/')
                 .Append(addedSong.Id)
                 .ToString();
-            return Created(uri, ResponseWrapper.Wrap("Added Song", addedSong));
+            return Created(uri, _wrapper.Wrap("Added Song", addedSong));
         }
 
         [HttpDelete("{id}")]
@@ -90,7 +95,7 @@ namespace LyricsAPI.Presentation.Controllers
                 _cache.Remove(id);
             }
 
-            return result ? NoContent() : BadRequest(ResponseWrapper.Wrap("Error", "Song Is Not Found"));
+            return result ? NoContent() : BadRequest(_wrapper.Wrap("Error", "Song Is Not Found"));
         }
 
         [HttpPut("{id}")]
@@ -100,7 +105,7 @@ namespace LyricsAPI.Presentation.Controllers
             if (string.IsNullOrWhiteSpace(request.RawLyrics) ||
                 string.IsNullOrWhiteSpace(request.ArtistVerses))
             {
-                return BadRequest(ResponseWrapper.Wrap(
+                return BadRequest(_wrapper.Wrap(
                     "Error", "Parameters Must Not Be Null"));
             }
 
@@ -112,7 +117,7 @@ namespace LyricsAPI.Presentation.Controllers
                 _cache.Remove(id);
             }
 
-            return result ? NoContent() : BadRequest(ResponseWrapper.Wrap("Error", "Song Is Not Found"));    
+            return result ? NoContent() : BadRequest(_wrapper.Wrap("Error", "Song Is Not Found"));    
         }
 
         [HttpGet("{id}/{other}")]
@@ -128,7 +133,7 @@ namespace LyricsAPI.Presentation.Controllers
 
             if (song is null)
             {
-                return BadRequest(ResponseWrapper.Wrap("Error", "Wrong Song Id"));
+                return BadRequest(_wrapper.Wrap("Error", "Wrong Song Id"));
             }
 
             if (!_cache.TryGetValue(other, out var otherSong))
@@ -140,11 +145,11 @@ namespace LyricsAPI.Presentation.Controllers
 
             if (otherSong is null) 
             {
-                return BadRequest(ResponseWrapper.Wrap("Error", "Wrong Second Song Id"));
+                return BadRequest(_wrapper.Wrap("Error", "Wrong Second Song Id"));
             }
 
-            return Ok(ResponseWrapper.Wrap(
-                "Song Word Matches List", StatisticsProvider.GetSongMatches((SongLyrics)song, (SongLyrics)otherSong)));
+            return Ok(_wrapper.Wrap(
+                "Song Word Matches List", _statisticsProvider.GetSongMatches((SongLyrics)song, (SongLyrics)otherSong)));
         }
     }
 }

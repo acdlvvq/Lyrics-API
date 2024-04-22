@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("LyricsAPI.Application")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+cf37d01a6604b5539c6df06bd85bcd9ff0a714b8")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+235a0260862c7d384c0d5c78d797ad5e82481892")]
 [assembly: System.Reflection.AssemblyProductAttribute("LyricsAPI.Application")]
 [assembly: System.Reflection.AssemblyTitleAttribute("LyricsAPI.Application")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

@@ -1,6 +1,6 @@
 ﻿using LyricsAPI.Application.SongLyricsUseCases.Queries;
+using LyricsAPI.Core.Abstractions;
 using LyricsAPI.Core.Models;
-using LyricsAPI.Infrastructure;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Caching.Memory;
@@ -13,12 +13,17 @@ namespace LyricsAPI.Presentation.Controllers
     {
         private readonly IMediator _mediator;
         private readonly IMemoryCache _cache;
+        private readonly IResponseWrapper _wrapper;
+        private readonly IStatisticsProvider _statisticsProvider;
 
         public StatisticsController(
-            IMediator mediator, IMemoryCache cache)
+            IMediator mediator, IMemoryCache cache,
+            IResponseWrapper wrapper, IStatisticsProvider statisticsProvider)
         {
             _mediator = mediator;
             _cache = cache;
+            _wrapper = wrapper;
+            _statisticsProvider = statisticsProvider;
         }
 
         [HttpGet("{artist}")]
@@ -33,18 +38,18 @@ namespace LyricsAPI.Presentation.Controllers
 
             if (_songs is null)
             {
-                return NotFound(ResponseWrapper.Wrap("Error", "Artist Is Not Found"));
+                return NotFound(_wrapper.Wrap("Error", "Artist Is Not Found"));
             }
 
             var songs = (List<SongLyrics>) _songs;
 
             if (songs.Count == 0)
             {
-                return NotFound(ResponseWrapper.Wrap("Error", "Artist Is Not Found"));
+                return NotFound(_wrapper.Wrap("Error", "Artist Is Not Found"));
             }
 
-            return Ok(ResponseWrapper.Wrap(
-                "Song Statistics", StatisticsProvider.GetStatistics(songs)));
+            return Ok(_wrapper.Wrap(
+                "Song Statistics", _statisticsProvider.GetStatistics(songs)));
         }
 
         [HttpGet("{artist}/{word}")]
@@ -59,18 +64,18 @@ namespace LyricsAPI.Presentation.Controllers
 
             if (_songs is null)
             {
-                return NotFound(ResponseWrapper.Wrap("Error", "Artist Is Not Found"));
+                return NotFound(_wrapper.Wrap("Error", "Artist Is Not Found"));
             }
 
             var songs = (List<SongLyrics>)_songs;
 
             if (songs.Count == 0)
             {
-                return NotFound(ResponseWrapper.Wrap("Error", "Artist Is Not Found"));
+                return NotFound(_wrapper.Wrap("Error", "Artist Is Not Found"));
             }
 
-            return Ok(ResponseWrapper.Wrap(
-                "Song Statistics", StatisticsProvider.GetWordStatistics(songs, word)));
+            return Ok(_wrapper.Wrap(
+                "Song Statistics", _statisticsProvider.GetWordStatistics(songs, word)));
         }
     }
 }

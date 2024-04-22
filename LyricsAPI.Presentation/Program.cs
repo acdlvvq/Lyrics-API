@@ -6,6 +6,7 @@ using LyricsAPI.Persistence;
 using LyricsAPI.Persistence.Repositories;
 using Microsoft.EntityFrameworkCore;
 using LyricsAPI.Application;
+using LyricsAPI.Infrastructure;
 
 namespace LyricsAPI.Presentation
 {
@@ -27,6 +28,8 @@ namespace LyricsAPI.Presentation
 
             builder.Services.AddScoped<IValidator<SongLyrics>, SongLyricsValidator>();
             builder.Services.AddScoped<ISongLyricsRepository, SongLyricsRepository>();
+            builder.Services.AddSingleton<IResponseWrapper, ResponseWrapper>();
+            builder.Services.AddSingleton<IStatisticsProvider, StatisticsProvider>();
 
             builder.Services.AddApplication();
             builder.Services.AddMemoryCache();

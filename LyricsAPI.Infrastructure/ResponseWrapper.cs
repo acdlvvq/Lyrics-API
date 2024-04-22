@@ -1,10 +1,11 @@
-﻿using LyricsAPI.Core.Models;
+﻿using LyricsAPI.Core.Abstractions;
+using LyricsAPI.Core.Models;
 
 namespace LyricsAPI.Infrastructure
 {
-    public static class ResponseWrapper
+    public class ResponseWrapper : IResponseWrapper
     {
-        public static Response<T> Wrap<T>(string message, T item)
+        public Response<T> Wrap<T>(string message, T item)
         {
             return new Response<T>
             {
